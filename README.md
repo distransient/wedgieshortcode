@@ -1,10 +1,10 @@
-[![wedgies.com](https://www.wedgies.com/img/logo_blue.png)](http://wedgies.com/)
+# [![wedgies.com](https://www.wedgies.com/img/logo_blue.png)](http://wedgies.com/) Shortcode Wordpress Plugin
 
-# Wedgies Shortcode Wordpress Plugin
+This plugin makes it easy to embed a wedgie into the content of a post or page using a shortcode. Use the wedgie ID and insert the shortcode just like this:
 
-This plugin makes it easy to embed a wedgie into the content of a post or page using a shortcode.  Use the wedgie ID and insert the shortcode like:
-
-`[wedgie id="5164b8cc9688ec020000000a"]`
+```
+[wedgie id="5164b8cc9688ec020000000a"]
+```
 
 What is a wedgie?  Wedgies are polls for the realtime web.
 People have questions, and they want them answered right now. We want to help. Most polling technology is stuck in the Dark Ages of Internet Time. You can’t take it anywhere or introduce it to your friends without being disappointed. We’re here to save the world from boring, unwieldy surveys. Best part? You could make your own wedgie, right now. 
