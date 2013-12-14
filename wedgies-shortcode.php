@@ -1,13 +1,16 @@
 <?php
+/**
+ * @package Wedgies_Shortcode
+ * @version 0.2
+ */
 /*
-Plugin Name: Wedgies
+Plugin Name: Wedgies Shortcode
 Plugin URI: http://wedgies.com
 Description: Support for a <a href="http://wedgies.com">Wedgies</a> Wordpress shortcode.  Use [wedgie id="5164b8cc9688ec020000000a"] to embed any wedgie into post content.
-Version: 0.1
+Version: 0.2
 Author: Brendan Nee
 Author URI: http://bn.ee
 */
-
 /*
 Wedgies (Wordpress Plugin)
 Copyright (C) 2013 Wedgies

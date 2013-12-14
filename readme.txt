@@ -3,8 +3,8 @@ Contributors: Wedgies
 Donate link: http://wedgies.com
 Tags: survey, shortcode, poll
 Requires at least: 2.5
-Tested up to: 3.5.1
-Stable tag: 0.1
+Tested up to: 3.8
+Stable tag: 0.2
 
 Adds a shortcode to support embedded wedgies. [wedgie id="5164b8cc9688ec020000000a"]
 
