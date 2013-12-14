@@ -21,7 +21,3 @@ People have questions, and they want them answered right now. We want to help. M
 1. Paste the short code `[wedgie id="WEDGIE-ID-HERE"]` where you'd like the embedded wedgie to appear.
 1. You can get the ID of your wedgie from the URL of the page when you create a wedgie. For instance, the ID of [this wedgie](http://www.wedgies.com/question/5146406a6acb6a0200006b56) is "5146406a6acb6a0200006b56".
 
-## Changelog 
-
-- 0.1
-  * Plugin Launch
