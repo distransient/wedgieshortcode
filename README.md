@@ -1,4 +1,4 @@
-# [![wedgies.com](https://www.wedgies.com/img/logo_blue.png)](http://wedgies.com/) Shortcode Wordpress Plugin
+# [![wedgies.com](https://www.wedgies.com/img/logo_blue.png)](http://wedgies.com/) Wordpress Shortcode Plugin
 
 This plugin makes it easy to embed a wedgie into the content of a post or page using a shortcode. Use the wedgie ID and insert the shortcode just like this:
 
