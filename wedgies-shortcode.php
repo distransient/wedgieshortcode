@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wedgies_Shortcode
- * @version 0.2
+ * @version 1.1
  */
 /*
 Plugin Name: Wedgies Shortcode
 Plugin URI: http://wedgies.com
-Description: Support for a <a href="http://wedgies.com">Wedgies</a> Wordpress shortcode.  Use [wedgie id="5164b8cc9688ec020000000a"] to embed any wedgie into post content.
-Version: 0.2
-Author: Brendan Nee
+Description: Wedgies are polls you can embed on your Wordpress page. Engage your audience by asking them a question via Wedgies.
+Version: 1.1
+Author: Brendan Nee, James Barcellano
 Author URI: http://bn.ee
 */
 /*
@@ -30,13 +30,52 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+function enqueue_wedgie() {
+	wp_enqueue_script('wedgie_embed', 'https://www.wedgies.com/js/widgets.js', null, '1.00');
+}
+
 add_shortcode("wedgie", "wedgie_handler");
 
 function wedgie_handler($attrs) {
-  $attrs = shortcode_atts(array(
-    "id" => "5164b8cc9688ec020000000a"
-  ), $attrs);
-  $wedgie_output = '<script src="http://www.wedgies.com/js/public_embed/v1/embed.min.js"></script><div class="wedgies-embed" style="height: 400px; width: 400px;" data-wedgie-id="'  . $attrs['id'] . '"></div>';
-  return $wedgie_output;
+
+	$attrs = shortcode_atts(array(
+		"id" => "52dc9862da36f6020000000c"
+	), $attrs);
+	
+	$wedgie_output = '<noscript><a href="https://www.wedgies.com/question/' . $attrs['id'] . '">Vote on our poll!</a></noscript><div class="wedgie-widget" wd-pending wd-type="embed" wd-version="v1" id="' . $attrs['id'] . '" style="max-width: 720px;"></div>';
+	
+	return $wedgie_output;
 }
-?>
+
+wp_embed_register_handler( 'wedgie', '#http(s?)://(www\.)?wedgies\.com/question/(.*)#i', 'wp_embed_handler_wedgie', 1);
+
+function wp_embed_handler_wedgie( $matches, $attr, $url, $rawattr ) {
+	
+	$embed = sprintf(
+				'<noscript><a href="https://www.wedgies.com/question/%1$s">Vote on our poll!</a></noscript><div class="wedgie-widget" wd-pending wd-type="embed" wd-version="v1" id="%1$s" style="max-width: 720px;"></div>', $matches[3]);
+
+	return apply_filters( 'embed_wedgie', $embed, $matches, $attr, $url, $rawattr );
+}
+
+function has_wedgie($posts) {
+	if (empty($posts)) {
+		return $posts;
+	}
+	
+	$shortcode_found = false;
+	
+	foreach ($posts as $post) {
+		if ( !(stripos($post->post_content, '[wedgie') === false) || preg_match('#http(s?)://(www\.)?wedgies\.com/question/(.*)#i', $post->post_content)) {
+			$shortcode_found = true;
+			break;
+		}
+	}
+	
+	if ($shortcode_found) {
+		add_action('wp_enqueue_scripts', 'enqueue_wedgie');
+	}
+	
+	return $posts;
+}
+
+add_action('the_posts', 'has_wedgie');
