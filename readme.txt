@@ -22,7 +22,7 @@ This plugin makes it easy to embed a [wedgie](http://wedgies.com) into the conte
 2. Activate it through the "Plugins" menu in WordPress
 3. Edit the post or page where you'd like to insert an embedded wedgie.
 4. You can embed a wedgie one of two ways:
-    1. Paste the url of a wedgie in the post: http://www.wedgies.com/results/question/52dc9862da36f6020000000c
+    1. Paste the url of a wedgie in the post: http://www.wedgies.com/question/52dc9862da36f6020000000c
     2. Paste the short code `[wedgie id="WEDGIE-ID-HERE"]` where you'd like the embedded wedgie to appear. You can get the ID of your wedgie from the URL of the page when you create a wedgie. For instance, the ID of [this wedgie](http://www.wedgies.com/results/question/52dc9862da36f6020000000c) is "52dc9862da36f6020000000c".
 
 == Screenshots ==
