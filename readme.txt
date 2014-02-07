@@ -1,5 +1,5 @@
 === Wedgies Shortcode ===
-Contributors: Wedgies, James Barcellano
+Contributors: Wedgies, Michael Keating, James Barcellano
 Donate link: http://wedgies.com
 Tags: survey, shortcode, poll
 Requires at least: 2.5
