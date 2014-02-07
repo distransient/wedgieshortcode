@@ -12,9 +12,9 @@ Wedgies are polls you can embed on your Wordpress page. Engage your audience by 
 
 Polls are one of the best ways to engage your website audience.  Wedgies are well designed and responsive polling widgets that look great anywhere on your website, allow you to engage your visitors with questions, and encourage them to share their votes back out to social media.
 
-This plugin makes it easy to embed a [wedgie](http://wedgies.com) into the content of a post or page using a shortcode.  Use the wedgie ID and insert the shortcode like:
+This plugin makes it easy to embed a [wedgie](http://wedgies.com) into the content of a post or page using a URL.
 
-`[wedgie id="52dc9862da36f6020000000c"]`
+`http://www.wedgies.com/question/5164b8cc9688ec020000000a`
 
 == Installation ==
 
