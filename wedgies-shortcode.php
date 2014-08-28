@@ -31,91 +31,121 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- * Enqueue wedgie script
- */
-function enqueue_wedgie() {
-	wp_enqueue_script( 'wedgie_embed', 'https://www.wedgies.com/js/widgets.js', null, '1.2' );
-}
+class Wedgie_Shortcode_Plugin {
+
+	const SHORTCODE_SLUG = 'wedgie';
+
+	/**
+	 * @var Wedgie_Shortcode_Plugin
+	 */
+	static protected $instance;
+
+	/**
+	 * @return Wedgie_Shortcode_Plugin
+	 */
+	static public function instance() {
+		if ( empty( self::$instance ) ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Add hooks
+	 */
+	protected function __construct() {
+		add_shortcode( self::SHORTCODE_SLUG, array( $this, 'shortcode_handler' ) );
+		wp_embed_register_handler( 'wedgie', '#http(s?)://(www\.)?wedgies\.com/question/(.*)#i', array( $this, 'wp_embed_handler' ), 1 );
+		add_action( 'the_posts', array( $this, 'conditionally_enqueue_script' ) );
+
+	}
+
+	/**
+	 * wp_enqueue_scripts hook.
+	 */
+	public function enqueue_script() {
+		wp_enqueue_script( 'wedgie_embed', 'https://www.wedgies.com/js/widgets.js', null, '1.2' );
+	}
+
+	/**
+	 * Construct a wedgie embed from an ID
+	 *
+	 * @param $id
+	 * @return string
+	 */
+	function construct_embed( $id ) {
+		$embed = sprintf(
+			'<noscript><a href="%s">%s</a></noscript><div class="wedgie-widget" wd-pending wd-type="embed" wd-version="v1" id="%s" style="max-width: 720px;"></div>',
+			esc_url( 'https://www.wedgies.com/question/' . $id ),
+			esc_html__( 'Vote on our poll!', 'wedgies-shortcode' ),
+			esc_attr( $id )
+		);
+		return $embed;
+	}
+
+	/**
+	 * Shortcode handler for [wedgie]
+	 *
+	 * @param array $attrs
+	 *
+	 * @return string
+	 */
+	function shortcode_handler( $attrs ) {
+		$attrs = shortcode_atts(
+			array(
+				'id' => '52dc9862da36f6020000000c',
+			),
+			$attrs,
+			self::SHORTCODE_SLUG
+		);
+		$wedgie_output = $this->construct_embed( $attrs['id'] );
+		return $wedgie_output;
+	}
+
+	/**
+	 * Embed handler for Wedgie
+	 *
+	 * @param array $matches
+	 * @param array $attr
+	 * @param string $url
+	 * @param string $rawattr
+	 *
+	 * @return mixed|void
+	 */
+	function wp_embed_handler( $matches, $attr, $url, $rawattr ) {
+		$embed = $this->construct_embed( $matches[3] );
+		return apply_filters( 'embed_wedgie', $embed, $matches, $attr, $url, $rawattr );
+	}
 
 
-/**
- * Construct a wedgie embed from an ID
- *
- * @param $id
- * @return string
- */
-function wedgie_construct_embed( $id ) {
-	$embed = sprintf(
-		'<noscript><a href="%s">%s</a></noscript><div class="wedgie-widget" wd-pending wd-type="embed" wd-version="v1" id="%s" style="max-width: 720px;"></div>',
-		esc_url( 'https://www.wedgies.com/question/' . $id ),
-		esc_html__( 'Vote on our poll!', 'wedgies-shortcode' ),
-		esc_attr( $id )
-	);
-	return $embed;
-}
+	/**
+	 * Hook handler for the_posts to enqueue the JS if a wedgie is found.
+	 *
+	 * @param array $posts
+	 *
+	 * @return mixed
+	 */
+	function conditionally_enqueue_script( $posts ) {
+		if ( empty( $posts ) ) {
+			return $posts;
+		}
 
-/**
- * Shortcode handler for [wedgie]
- *
- * @param array $attrs
- *
- * @return string
- */
-function wedgie_handler( $attrs ) {
-	$attrs = shortcode_atts( array(
-		'id' => '52dc9862da36f6020000000c',
-	), $attrs, 'wedgie' );
-	$wedgie_output = wedgie_construct_embed( $attrs['id'] );
-	return $wedgie_output;
-}
-add_shortcode( 'wedgie', 'wedgie_handler' );
+		$shortcode_found = false;
 
+		foreach ( $posts as $post ) {
+			if ( ! ( false === stripos( $post->post_content, '[' . self::SHORTCODE_SLUG ) ) || preg_match( '#http(s?)://(www\.)?wedgies\.com/question/(.*)#i', $post->post_content ) ) {
+				$shortcode_found = true;
+				break;
+			}
+		}
 
+		if ( $shortcode_found ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_script' ) );
+		}
 
-/**
- * Embed handler for Wedgie
- *
- * @param array $matches
- * @param array $attr
- * @param string $url
- * @param string $rawattr
- *
- * @return mixed|void
- */
-function wp_embed_handler_wedgie( $matches, $attr, $url, $rawattr ) {
-	$embed = wedgie_construct_embed( $matches[3] );
-	return apply_filters( 'embed_wedgie', $embed, $matches, $attr, $url, $rawattr );
-}
-wp_embed_register_handler( 'wedgie', '#http(s?)://(www\.)?wedgies\.com/question/(.*)#i', 'wp_embed_handler_wedgie', 1 );
-
-
-/**
- * Hook handler for the_posts to enqueue the JS if a wedgie is found.
- *
- * @param array $posts
- *
- * @return mixed
- */
-function has_wedgie( $posts ) {
-	if ( empty( $posts ) ) {
 		return $posts;
 	}
 
-	$shortcode_found = false;
-
-	foreach ( $posts as $post ) {
-		if ( ! ( false === stripos( $post->post_content, '[wedgie' ) ) || preg_match( '#http(s?)://(www\.)?wedgies\.com/question/(.*)#i', $post->post_content ) ) {
-			$shortcode_found = true;
-			break;
-		}
-	}
-
-	if ( $shortcode_found ) {
-		add_action( 'wp_enqueue_scripts', 'enqueue_wedgie' );
-	}
-
-	return $posts;
 }
 
-add_action( 'the_posts', 'has_wedgie' );
+Wedgie_Shortcode_Plugin::instance();
